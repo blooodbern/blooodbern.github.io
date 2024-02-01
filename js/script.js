@@ -4,3 +4,9 @@ function gotoLink(link) {
 function gotoHome(link) {
   location.href = link.value;
 }
+let upButton = document.getElementById("upBtn");
+
+window.onscroll = function() {scrollFunction()};
+function topFunction() {
+  document.documentElement.scrollTop = 0;
+}
