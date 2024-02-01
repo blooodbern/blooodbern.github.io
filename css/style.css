@@ -28,14 +28,8 @@ button {
 button:hover {
   background-color: #a50000;
 }
-.homebutton {
-  padding: 10px 20px;
-  border: 2px solid #ccc;
-  border-color: #6c1d16;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
+links-button {
+	
 }
 .animated-button {
   padding: 10px 20px;
