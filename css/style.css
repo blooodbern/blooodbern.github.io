@@ -1,0 +1,42 @@
+body {
+  font-family: "Helvetica";
+  background-size: cover;
+}
+a {
+  color: #c3a09d;
+}
+div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+button {
+  background-color: #6c1d16;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #a50000;
+}
+.animated-button {
+  padding: 10px 20px;
+  border: 2px solid #ccc;
+  border-color: #6c1d16;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.animated-button:hover {
+  border-color: #a50000;
+  box-shadow: 0 0 5px #a50000;
+}
+
+.animated-button:active {
+  transform: scale(0.98);
+  box-shadow: inset 0 0 5px #a50000;
+}
