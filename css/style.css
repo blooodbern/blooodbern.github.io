@@ -5,10 +5,17 @@ body {
 a {
   color: #c3a09d;
 }
-div {
+#content {
   display: flex;
   justify-content: center;
-  align-items: center;
+}
+#textcon {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  z-index: 1;
 }
 button {
   background-color: #6c1d16;
@@ -20,6 +27,15 @@ button {
 }
 button:hover {
   background-color: #a50000;
+}
+.homebutton {
+  padding: 10px 20px;
+  border: 2px solid #ccc;
+  border-color: #6c1d16;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
 }
 .animated-button {
   padding: 10px 20px;
