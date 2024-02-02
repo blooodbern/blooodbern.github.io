@@ -7,6 +7,7 @@ a {
   color: #c3a09d;
 }
 #upBtn {
+  background-color: #6c1d16;
   position: fixed;
   bottom: 20px;
   right: 30px;
@@ -20,7 +21,7 @@ a {
   transition: all 0.2s ease-in-out;
 }
 #upBtn:hover {
-  border-color: #a50000;
+  border-color: #6c1d16;
   box-shadow: 0 0 5px #a50000;
 }
 #content {
@@ -47,7 +48,6 @@ button {
   transition: all 0.2s ease-in-out;
 }
 button:hover {
-  background-color: #a50000;
   border-color: #6c1d16;
   box-shadow: 0 0 5px #a50000;
 }
