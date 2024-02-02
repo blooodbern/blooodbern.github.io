@@ -20,10 +20,6 @@ a {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
-#upBtn:hover {
-  border-color: #6c1d16;
-  box-shadow: 0 0 5px #a50000;
-}
 #content {
   display: flex;
   justify-content: center;
