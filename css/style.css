@@ -1,24 +1,15 @@
 body {
   font-family: "Helvetica";
   background-size: cover;
-  scroll-behavior: smooth;
 }
 a {
   color: #c3a09d;
 }
 #upBtn {
-  background-color: #6c1d16;
   position: fixed;
   bottom: 20px;
   right: 30px;
   z-index: 99;
-  padding: 10px 20px;
-  border: 2px solid #ccc;
-  border-color: #6c1d16;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
 }
 #content {
   display: flex;
