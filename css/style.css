@@ -5,9 +5,6 @@ body {
 a {
   color: #c3a09d;
 }
-#bottom-empty {
-  opacity: 0;
-}
 #upBtn {
   position: fixed;
   bottom: 20px;
