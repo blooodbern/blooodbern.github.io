@@ -5,6 +5,9 @@ body {
 a {
   color: #c3a09d;
 }
+#bottom-empty {
+  opacity: 0;
+}
 #upBtn {
   position: fixed;
   bottom: 20px;
@@ -14,14 +17,6 @@ a {
 #content {
   display: flex;
   justify-content: center;
-}
-#textcon {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 500px;
-  z-index: 1;
 }
 button {
   background-color: #6c1d16;
