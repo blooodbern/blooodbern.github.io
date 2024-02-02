@@ -40,7 +40,7 @@ button {
   color: #fff;
   padding: 10px 20px;
   border: 2px solid #ccc;
-  border-color: #a50000;
+  border-color: #6c1d16;
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
@@ -48,7 +48,7 @@ button {
 }
 button:hover {
   background-color: #a50000;
-  border-color: #a50000;
+  border-color: #6c1d16;
   box-shadow: 0 0 5px #a50000;
 }
 button:active {
