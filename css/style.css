@@ -8,6 +8,9 @@ body {
 a {
   color: #c3a09d;
 }
+#em-b {
+	height: 50px;
+}
 #upBtn {
   position: fixed;
   bottom: 20px;
