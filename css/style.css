@@ -7,6 +7,7 @@ body {
 }
 a {
   color: #c3a09d;
+  text-decoration: none;
 }
 #em-b {
   height: 50px;
