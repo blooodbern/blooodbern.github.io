@@ -3,9 +3,9 @@ html {
 }
 body {
   font-family: "Helvetica";
-  background-size: cover;
   color: white;
-  background: url("/img/background1.gif") no-repeat;
+  background: url("../img/background1.gif") no-repeat;
+  background-size: cover;
 }
 a {
   color: #c3a09d;
@@ -19,7 +19,7 @@ a {
   bottom: 20px;
   right: 30px;
 }
-#content {
+.content {
   display: flex;
   justify-content: center;
 }
