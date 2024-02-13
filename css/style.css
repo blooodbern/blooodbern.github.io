@@ -1,18 +1,33 @@
 html {
-	scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 body {
   font-family: "Helvetica";
+  font-size: 12pt;
   color: white;
   background: url("../img/background1.gif") no-repeat;
   background-size: cover;
+}
+p {
+  color: gray;
+  font-weight: bold;
+  display: inline;
+}
+h1, h2 {
+  display: flex;
+  justify-content: center;
 }
 a {
   color: #c3a09d;
   text-decoration: none;
 }
+a {
+  color: green !important;
+}
 #em-b {
   height: 50px;
+  width: 50px;
+  margin: 10px;
 }
 #upBtn {
   position: fixed;
@@ -20,7 +35,7 @@ a {
   right: 30px;
 }
 .content {
-  display: flex;
+  display: block;
   justify-content: center;
 }
 button {
