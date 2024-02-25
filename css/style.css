@@ -18,11 +18,11 @@ h1, h2 {
   justify-content: center;
 }
 a {
-  color: #c3a09d;
+  color: #c3a09d !important;
   text-decoration: none;
 }
 a {
-  color: green !important;
+  color: green;
 }
 #em-b {
   height: 50px;
@@ -34,7 +34,7 @@ a {
   bottom: 20px;
   right: 30px;
 }
-.content {
+.content + h1{
   display: block;
   justify-content: center;
 }
@@ -56,4 +56,34 @@ button:hover {
 button:active {
   transform: scale(0.98);
   box-shadow: inset 0 0 5px #a50000;
+}
+.list-style {
+	list-style-type: square;
+	list-style-position: inside;
+}
+li {
+	border: 2px solid #ccc;
+}
+.list-style-img {
+	list-style-image: url("../img/favicon.ico");
+}
+.list-style-compact {
+	list-style: none disc inside;
+}
+.div-list-item {
+	display: list-item;
+	list-style: none disc inside;
+}
+#nav {
+	display: flex;
+	list-style: none disc inside;
+}
+table {
+	width: 100%;
+	color: purple;
+	border-collapse: separate;
+	border-spacing: 5px;
+}
+table, th, td {
+	border: 2px solid #ccc;
 }
