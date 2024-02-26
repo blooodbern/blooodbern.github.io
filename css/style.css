@@ -24,7 +24,7 @@ a {
 a {
   color: green;
 }
-#em-b {
+.em-b {
   height: 50px;
   width: 50px;
   margin: 10px;
@@ -34,7 +34,7 @@ a {
   bottom: 20px;
   right: 30px;
 }
-.content + h1{
+.content {
   display: block;
   justify-content: center;
 }
@@ -74,9 +74,9 @@ li {
 	display: list-item;
 	list-style: none disc inside;
 }
-#nav {
-	display: flex;
-	list-style: none disc inside;
+#nav > li {
+	display: inline;
+	list-style: none disc outside;
 }
 table {
 	width: 100%;
