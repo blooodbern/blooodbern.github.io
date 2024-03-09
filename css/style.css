@@ -5,24 +5,19 @@ body {
   font-family: "Helvetica";
   font-size: 12pt;
   color: white;
-  background: url("../img/background1.gif") no-repeat;
-  background-size: cover;
+  /*background: url("../img/background1.gif") no-repeat;*/
+  /*background-size: cover;*/
+  background-color: rgb(14, 6, 11);
+}
+.prev-labs {
+  display: none;
 }
 p {
-  color: gray;
   font-weight: bold;
-  display: inline;
-}
-h1, h2 {
-  display: flex;
-  justify-content: center;
 }
 a {
   color: #c3a09d !important;
   text-decoration: none;
-}
-a {
-  color: green;
 }
 .em-b {
   height: 50px;
@@ -31,11 +26,24 @@ a {
 }
 #upBtn {
   position: fixed;
+  bottom: 70px;
+  right: 30px;
+  text-align: center;
+}
+#homeBtn {
+  position: fixed;
+  bottom: 120px;
+  right: 30px;
+  width: 85px;
+}
+#downBtn {
+  position: fixed;
   bottom: 20px;
   right: 30px;
+  width: 85px;
 }
 .content {
-  display: block;
+  display: flex;
   justify-content: center;
 }
 button {
@@ -86,4 +94,8 @@ table {
 }
 table, th, td {
 	border: 2px solid #ccc;
+}
+.form {
+  display: flex;
+  justify-content: center;
 }

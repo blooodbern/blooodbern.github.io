@@ -7,3 +7,6 @@ function gotoHome(link) {
 function topFunction() {
 	document.documentElement.scrollTop = 0;
 }
+function bottomFunction() {
+	document.documentElement.scrollTop = document.documentElement.scrollHeight;
+}
