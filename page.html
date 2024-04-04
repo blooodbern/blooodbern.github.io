@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<head>
+  <title>Japan Site</title>
+  <script src="script.js"></script>
+  <link rel="icon" href="img/icon.jpg" type="image/x-icon" />
+  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+
+  <nav>
+    <div id="menuToggle">
+      <input type="checkbox" />
+      <span></span>
+      <span></span>
+      <span></span>
+      <ul id="menu">
+        <button class="common-button" onclick="topFunction()" id="upBtn">Вгору</button>
+        <a href="#pictures"><li>Краєвиди</li></a>
+        <a href="#history"><li>Історія</li></a>
+        <a href="#food"><li>Їжа</li></a>
+        <a href="#language"><li>Мова</li></a>
+        <button class="common-button" onclick="bottomFunction()" id="downBtn">Вниз</button>
+      </ul>
+    </div>
+  </nav>
+
+  <section id="start" class="parallax-1">
+    <h1 class="section-header">Welcome <br> to <br> Japan!</h1>
+  </section>
+  
+  <section id="pictures" class="palallax-no-image">
+    <h1>В Японії багато мальовничих місць!</h1>
+    <div>
+      <div class="carousel">
+        <ul class="slides">
+          <input type="radio" name="radio-buttons" id="img-1" checked />
+          <li class="slide-container">
+            <div class="slide-image">
+              <img src="img/meguro_river.jpg">
+            </div>
+            <div class="carousel-controls">
+              <label for="img-4" class="prev-slide">
+                <span>‹</span>
+              </label>
+              <label for="img-2" class="next-slide">
+                <span>›</span>
+              </label>
+            </div>
+          </li>
+          <input type="radio" name="radio-buttons" id="img-2" />
+          <li class="slide-container">
+            <div class="slide-image">
+              <img src="img/blue_pond_hokkaido.jpg">
+            </div>
+            <div class="carousel-controls">
+              <label for="img-1" class="prev-slide">
+                <span>‹</span>
+              </label>
+              <label for="img-3" class="next-slide">
+                <span>›</span>
+              </label>
+            </div>
+          </li>
+          <input type="radio" name="radio-buttons" id="img-3" />
+          <li class="slide-container">
+            <div class="slide-image">
+              <img src="img/bioluminescent_shrimp.jpg">
+            </div>
+            <div class="carousel-controls">
+              <label for="img-2" class="prev-slide">
+                <span>‹</span>
+              </label>
+              <label for="img-4" class="next-slide">
+                <span>›</span>
+              </label>
+            </div>
+          </li>
+          <input type="radio" name="radio-buttons" id="img-4" />
+          <li class="slide-container">
+            <div class="slide-image">
+              <img src="img/fuji.jpg">
+            </div>
+            <div class="carousel-controls">
+              <label for="img-3" class="prev-slide">
+                <span>‹</span>
+              </label>
+              <label for="img-1" class="next-slide">
+                <span>›</span>
+              </label>
+            </div>
+          </li>
+          <div class="carousel-dots">
+            <label for="img-1" class="carousel-dot" id="img-dot-1"></label>
+            <label for="img-2" class="carousel-dot" id="img-dot-2"></label>
+            <label for="img-3" class="carousel-dot" id="img-dot-3"></label>
+            <label for="img-4" class="carousel-dot" id="img-dot-4"></label>
+          </div>
+        </ul>
+      </div>
+    </div>
+    <div style="display: grid; place-items: center">
+      <p style="width: 1000px; text-align: justify; text-indent: 40px; margin-bottom: 0%;">Відкрийте для себе вражаючу красу Японії, де величні гори зустрічаються з лазурними водами океану, а квітучі сади сусідять 
+        з бамбуковими лісами. Подорожуйте мальовничими гірськими дорогами, що ведуть до засніжених вершин Фудзі, або прогуляйтеся 
+        мальовничими стежками вздовж вишневих садів, що розцвітають навесні. Відвідайте стародавні храми, розташовані серед мальовничих 
+        пейзажів, або зануртеся в спокійну атмосферу традиційних японських садів.
+      </p>
+      <p style="width: 1000px; text-align: justify; text-indent: 40px; margin-bottom: 0%;">
+        Японія пропонує безліч вражаючих пейзажів, які зачаровують і надихають. Відкрийте для себе дику красу вулканічних островів, 
+        лазурні води тропічних пляжів, або мальовничі рисові тераси, що спускаються з гір. Незалежно від того, чи шукаєте ви величні 
+        гори, мальовничі узбережжя, або тихі сільські пейзажі, Японія здивує вас своїми мальовничими краєвидами.
+      </p>
+    </div>
+  </section>
+
+  <section id="history" class="parallax-2">
+    <h1 style="display: flex; justify-content: center; font-size: 32px;">Історія Японії</h1>
+    <div style="font-weight: bold; display: grid; place-items: center">
+      <p>
+        Згідно з переказами, Японська імперія виникла в 660 році до н. е., коли на престол зійшов перший японський імператор Дзімму. 
+        Протягом першого тисячоліття Японія розвивалася під впливом Кореї і Китаю, мали більш високий рівень цивілізації.
+      </p>
+      <p>
+        Японія – унікальна країна з самобутньою культурою. Згідно з джерелами, вже в 660 році до н. е. тут була утворена імперія, 
+        з чого і почалася історія Японії. Коротко описуючи той період, можна сказати лише, що Японія успішно 
+        розвивалася, не знаючи серйозних конфліктів та іноземних вторгнень. Втім, цивілізація в Китаї і Кореї була розвинена краще, 
+        тому японці розвивалися під впливом цих двох держав.
+      </p>
+      <p>
+        Саме з Кореї в 7 столітті н. е. в країні поширився буддизм. Ця релігія виявилася настільки популярною, що швидко увійшла 
+        в ранг державної. У XII столітті Японії почали стрясати конфлікти, заволоділи країною військові диктатори-сегуни. І хоча ці 
+        війни велися за законами честі, вони, все ж, були надзвичайно кривавими. Боротьба між ними 
+        продовжувалася аж до 1867 року, коли останній сегун Токугава Есинобу віддав владу в руки імператора Муцухіто, який діяв в 
+        інтересах європейських партнерів. До цього іноземцям практично був закритий доступ в Японію. Об’єднавшись під однією рукою, 
+        Японія провела кілька загарбницьких війн, а у другої світової війни Японія билася на боці Німеччини, почавши свою участь з 
+        несподіваної атаки американську базу Перл Харбор.
+      </p>
+      <p>
+        Участь у війні на боці фашистів дуже негативно позначилося на країні, імператор був позбавлений влади, а Японія не 
+        могла мати власну армію. Сьогодні Японія – країна високих технологій, деякі навіть називають Японію країною технократів. 
+        Вона розташовується на архіпелазі, що складається з декількох великих островів і безлічі дрібних. Разом вони займають 
+        378 тис. кв. км, на яких тулиться близько 129 млн. чоловік. Столицею є місто Токіо. Країна гармонійно поєднує в собі 
+        ультрасучасні поїзда і прекрасну природу. Тут можна знайти як міста з величезною кількістю хмарочосів, так і тихі куточки, 
+        у яких посеред садів з квітучою сакурою приховуються буддистські храми.
+      </p>
+    </div>
+    <br>
+    <img src="img/history-photo-1.jpg" style="display: inline; width: 500px; height: 250px;">
+    <img src="img/history-photo-2.jpg" style="display: inline; width: 500px; height: 250px;">
+  </section>
+
+  <section id="food" class="palallax-no-image">
+    <h1>Їжа Японії</h1>
+    <div>
+      <div style="display: flex; justify-content: center; width: 1000px; margin-left: 150px;">
+        <img src="img/ramen.jpg" width="300px" height="200px" style="margin: 5px;">
+        <p style="margin-left: 20px;">
+          Рамен — одна із страв, яка прийшла в Японію і Корею з Китаю. Японці стали їсти рамен ще в 10-х роках XX 
+          століття, як раз приблизно в той час, коли китайська кухня стала привертати до себе широку увагу. І як 
+          тільки це блюдо вперше з'явилося в Японії, його почали продавати в маленьких вуличних кафе-ларьках "рамен-я". 
+          На сьогоднішній день в Японії рамен все ще продають в "рамен-я", але останнім часом його стали подавати 
+          і в кафе, і в ресторанах і навіть у спеціальних торгових автоматах, схожих з кавовими автоматами.
+        </p>
+      </div>
+      <div style="display: flex; justify-content: center; width: 1000px; margin-left: 150px;">
+        <img src="img/sushi.jpg" width="300px" height="200px" style="margin: 5px">
+        <p style="margin-left: 20px;">
+          У японській кухні суші стали повсюдно використовувати приблизно в VIII-X століттях. Рецепт прийшов 
+          з Китаю, але кухарі його вдосконалили. Вони стали завертати в рис, просочений оцтом, свіжу рибу, а 
+          не засолену. Так з 'явився прообраз сучасних суші. Тільки тоді це стало окремою стравою, а не способом зберігання риби.
+        </p>
+      </div>
+      <div style="display: flex; justify-content: center; width: 1000px; margin-left: 150px;">
+        <img src="img/mochi.jpg" width="300px" height="200px" style="margin: 5px;">
+        <p style="margin-left: 20px;">
+          Традиційні мочі — це маленькі солодкі японські тістечка з клейкого рисового борошна (мочіко). 
+          Мочі часто ароматизують матчу (або порошком зеленого чаю), що надає йому світло-зеленого відтінку. 
+          Вони мають м’який, жувальний зовнішній шар і смачну липку начинку з підсолодженої пасти з червоних 
+          бобів, її можна знайти в лавках азійських продуктів.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="language" class="parallax-3">
+    <h1 style="display: flex; justify-content: center; font-size: 32px;">Мова Японії</h1>
+    <div style="display: grid; place-items: center; font-weight: bold">
+      <p>
+        Японська мова графічно виражається трьома складовими елементами — двома 
+        силабічними абетками, хіраґана і катакана, а також ієрогліфами кандзі. 
+        Крім цього інколи використовується латинська абетка ромадзі для передачі 
+        японських фонем. Словник японської мови нараховує більше мільйона слів. 
+        Мова зазнала сильного впливу китайської мови. Після Другої світової війни 
+        відбувається активне запозичення англійських слів.
+      </p>
+    </div>
+    <br>
+    <img src="img/alphabet.jpg">
+    <div style="display: grid; place-items: center; font-weight: bold">
+      <p>
+        Хіраґа́на (яп. 平仮名, ひらがな, «гладка абетка», «рівна абетка») — 
+        японська складова абетка кана. Одна з систем письма японської мови 
+        поряд із катаканою, китайськими ієрогліфами, арабськими цифрами і 
+        латинською абеткою. Виникла у IX столітті на базі скорописного варіанту 
+        стародавньої японської абетки манйоґана. Остаточно уніфікована 
+        в другій половині XIX століття. Містить 48 знаків, кожен з яких 
+        позначає один склад або мору. Записується в традиційному 
+        поетичному або систематизованому фонетичному порядку. 
+        Використовується для запису граматичних часток, відмінкових суфіксів, 
+        післякорінних змінюваних частин слова, фонетичних підказок для 
+        ієрогліфів, а також у дошкільній літературі. 
+      </p>
+      <p>
+        Катака́на (яп. 片仮名, かたかな, «рубчаста абетка») — японська 
+        складова абетка кана. Її знаки походять від складових частин 
+        китайських ієрогліфів. Сьогодні використовується переважно 
+        для запису запозичених слів європейського походження, 
+        іншомовних власних назв (країни, імена тощо), та термінів, 
+        еквіваленти яких відсутні у японській мові. 
+      </p>
+      <p>
+        Канджі (яп. 漢字, «китайські знаки») — ієрогліфічне письмо, 
+        складова частина японської писемності. Запозичене японцями 
+        в Китаї у V—VI століттях. До запозичених знаків додані 
+        ієрогліфи, розроблені самими японцями (国字 — кокуджі). 
+      </p>
+    </div>
+  </section>
+  
+  <footer style="display: block; background-color: #1c0304;">
+    <br>
+    <p style="display: flex; justify-content: center; color: gray;">made by bloodbern</p>
+    <div class="socials">
+      <button class="common-button" style="margin: 2px" onclick="gotoLink(this)" value="https://t.me/bloodbern">My Telegram</button>
+      <button class="common-button" style="margin: 2px" onclick="gotoLink(this)" value="https://instagram.com/bloodbern">My Instagram</button>
+      <button class="common-button" style="margin: 2px" onclick="window.open('mailto:bloodbern09@gmail.com', '_blank')">Send me Email</button>
+    </div>
+    <br>
+  </footer>
+</body>
