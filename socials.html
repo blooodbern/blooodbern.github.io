@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<head>
+    <title>Socials</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="img/icon.jpg" type="image/x-icon" />
+</head>
+<body style="overflow: hidden;">
+    <h1>Зв'язок зі мною</h1>
+    <table align="center">
+        <tr>
+            <th>
+                <button class="footer-button" style="margin: 2px" onclick="window.open('https://t.me/bloodbern', '_blank')">My Telegram</button>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <button class="footer-button" style="margin: 2px" onclick="window.open('https://instagram.com/bloodbern', '_blank')">My Instagram</button>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <button class="footer-button" style="margin: 2px" onclick="window.open('mailto:bloodbern09@gmail.com', '_blank')">Напишіть мені!</button><br>
+            </th>
+            <th>
+                <button class="footer-button" style="margin: 2px" onclick="startGame()">Shall we play a game? :)</button><br>
+            </th>
+        </tr>
+    </table>
+    <div id="game">
+        <div id="food-items-container"></div>
+        <div id="chopsticks-container">
+            <div class="chopstick"></div>
+            <div class="chopstick">
+                <div id="chopsticks-hitbox"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const gravity = 10;
+        const horizontalDamping = 1.03;
+
+        const spawnInterval = 2000;
+
+        const game = document.getElementById("game");
+        const foodItemsContainer = document.getElementById("food-items-container");
+        const chopsticksContainer = document.getElementById("chopsticks-container");
+        const chopsticksHitbox = document.getElementById("chopsticks-hitbox");
+
+        const chopsticks = chopsticksContainer.children;
+        let foodItems = [];
+        let caughtFoodItem;
+
+        function startGame() {
+            setInterval(() => {
+                for (const foodItem of foodItems) {
+                    if(foodItem === caughtFoodItem) {
+                        continue;
+                    }
+
+                    foodItem.move();
+                }
+            }, 16.666666);
+
+            setInterval(() => {
+                const foodItem = new FoodItem();
+
+                foodItem.spawn();
+            }, spawnInterval);
+
+            game.classList.add("running");
+        }
+
+        class FoodItem {
+            constructor() {
+                const images = [
+                    "https://cdn-icons-png.flaticon.com/512/3259/3259041.png",
+                    "https://cdn-icons-png.flaticon.com/512/2515/2515345.png",
+                    "https://cdn-icons-png.flaticon.com/512/2718/2718224.png",
+                    "https://cdn-icons-png.flaticon.com/512/3361/3361870.png",
+                    "https://cdn-icons-png.flaticon.com/512/2713/2713962.png"
+                ].toSorted(() => 0.5 - Math.random());
+
+                const width = 80;
+
+                const image = document.createElement("img");
+                image.classList.add("game-food-item");
+                image.src = images[0];
+                image.style.width = `${width}px`;
+                image.style.top = `${Math.random() * (foodItemsContainer.clientHeight / 2)}px`; 
+
+                this.image = image;
+
+                this.size = width;
+
+                this.velocityX = 5 + Math.random() * 20;
+                this.velocityY = -10 - (Math.random() * 20);
+
+                this.caught = false;
+            }
+
+            spawn() {
+                foodItemsContainer.appendChild(this.image);
+                foodItems.push(this);
+
+                this.despawnTimer = setTimeout(this.despawn.bind(this), spawnInterval);
+            }
+
+            despawn() {
+                foodItemsContainer.removeChild(this.image);
+                foodItems = foodItems.filter(foodItem => foodItem !== this);
+            }
+
+            move(x, y) {
+                if(this.caught) {
+                    this.image.style.left = `${x - this.size / 2}px`;
+                    this.image.style.top = `${y - this.size / 2}px`;
+
+                    return;
+                }
+
+                this.image.style.left = `${this.image.offsetLeft + this.velocityX}px`;
+                this.image.style.top = `${this.image.offsetTop + (gravity + ++this.velocityY)}px`;
+
+                this.velocityX /= horizontalDamping;
+            }
+
+            catch() {
+                this.caught = true;
+                this.velocityX = 0;
+                this.velocityY = 0;
+
+                caughtFoodItem = this;
+            }
+        }
+
+        game.addEventListener("mousemove", event => {
+            for (const chopstick of chopsticks) {
+                chopstick.style.left = `${event.clientX}px`;
+                chopstick.style.top = `${event.clientY}px`;
+            }
+
+            if(!caughtFoodItem) {
+                return;
+            }
+
+            caughtFoodItem.move(event.clientX, event.clientY);
+        });
+
+        game.addEventListener("mouseenter", event => {
+            document.body.style.cursor = "none";
+        });
+
+        game.addEventListener("mouseleave", event => {
+            document.body.style.cursor = null;
+        });
+
+        game.addEventListener("mousedown", event => {
+            chopsticks.item(0).classList.add("grab");
+
+            const hitboxRect = chopsticksHitbox.getBoundingClientRect();
+
+            for (const foodItem of foodItems) {
+                const foodItemRect = foodItem.image.getBoundingClientRect();
+
+                if(hitboxRect.right < foodItemRect.left ||
+                    hitboxRect.left > foodItemRect.right ||
+                    hitboxRect.bottom < foodItemRect.top ||
+                    hitboxRect.top > foodItemRect.bottom) {
+
+                    continue;
+                }
+
+                foodItem.catch();
+            }
+
+        });
+
+        game.addEventListener("mouseup", event => {
+            chopsticks.item(0).classList.remove("grab");
+        });
+    </script>
+</body>

@@ -10,7 +10,7 @@ body {
     margin: 0;
     padding: 0;
     height: 100vh;
-    overflow: hidden;
+    overflow: auto;
 }
 
 h1 {
@@ -78,17 +78,17 @@ h1 {
 
 #menuToggle input:checked~span {
     opacity: 1;
-    transform: rotate(45deg) translate(-2px, -1px);
+    transform: rotate(25deg) translate(-2px, -1px);
     background: #fd9264;
 }
 
 #menuToggle input:checked~span:nth-last-child(3) {
     opacity: 0;
-    transform: rotate(0deg) scale(0.2, 0.2);
+    transform: rotate(0deg) scale(0.1, 0.1);
 }
 
-#menuToggle input:checked~span:nth-last-child(2) {
-    transform: rotate(-45deg) translate(0, -1px);
+#menuToggle input:checked~span:nth-last-child(4) {
+    transform: rotate(-25deg) translate(0, -1px);
 }
 
 #menu {
@@ -136,12 +136,19 @@ h1 {
     z-index: 101;
 }
 
-.section-header {
-    color: #4a1f0c;
-    font-size: 30pt;
-    display: flex;
-    justify-content: center;
-    margin-top: 20%
+.footer-button {
+    background-color: #6c1d16;
+    color: #fff;
+    padding: 10px 20px;
+    border-color: #6c1d16;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+}
+
+.footer-button:hover {
+    border-color: #6c1d16;
+    box-shadow: 0 0 5px #a50000;
 }
 
 .common-button {
@@ -358,3 +365,58 @@ div p {
 }
 
 /* ---------------------------- carousel ---------------------------- */
+
+#made-by {
+    visibility: hidden;
+}
+
+#made-by.visible {
+    visibility: visible;
+}
+
+/* ---------------------------- minigame ---------------------------- */
+#game {
+    visibility: hidden;
+}
+
+#game.running {
+    visibility: visible;
+}
+
+#game,
+#food-items-container {
+    height: 100%;
+}
+
+.game-food-item {
+    position: absolute;
+    user-select: none;
+}
+
+.chopstick {
+    position: absolute;
+    width: 400px;
+    height: 10px;
+    border-radius: 2px;
+    background-color: #fd9264;
+    border: 2px solid #e26a37;
+}
+
+.chopstick:first-child {
+    z-index: -1;
+    transform: translateY(-40px) translateX(-2px) rotate(-3deg);
+    transition: transform 100ms ease-in-out;
+}
+
+.chopstick.grab:first-child {
+    transform: translateY(-20px) translateX(-5px) rotate(-2deg);
+}
+
+#chopsticks-hitbox {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    left: -25px;
+    top: -35px;
+    /* background-color: red; */
+}

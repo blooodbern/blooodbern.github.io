@@ -4,11 +4,9 @@
   <script src="script.js"></script>
   <link rel="icon" href="img/icon.jpg" type="image/x-icon" />
   <link rel="stylesheet" href="style.css" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 
 <body>
-
   <nav>
     <div id="menuToggle">
       <input type="checkbox" />
@@ -17,17 +15,46 @@
       <span></span>
       <ul id="menu">
         <button class="common-button" onclick="topFunction()" id="upBtn">Вгору</button>
-        <a href="#pictures"><li>Краєвиди</li></a>
-        <a href="#history"><li>Історія</li></a>
-        <a href="#food"><li>Їжа</li></a>
-        <a href="#language"><li>Мова</li></a>
         <button class="common-button" onclick="bottomFunction()" id="downBtn">Вниз</button>
       </ul>
+      <script>
+        const menuItems = [
+        {
+          text: "Краєвиди",
+          href: "pictures"
+        },
+        {
+          text: "Історія",
+          href: "history"
+        },
+        {
+          text: "Їжа",
+          href: "food"
+        },
+        {
+          text: "Мова",
+          href: "language"
+        }
+      ];
+      
+const menu = document.getElementById("menu");
+
+for (const menuItem of menuItems) {
+	const li = document.createElement("li");
+	const a = document.createElement("a");
+
+	a.innerText = menuItem.text;
+	a.href = menuItem.href;
+
+	li.appendChild(a);
+	menu.appendChild(li);
+}
+      </script>
     </div>
   </nav>
 
   <section id="start" class="parallax-1">
-    <h1 class="section-header">Welcome <br> to <br> Japan!</h1>
+    <h1 style="color: #4a1f0c; font-size: 30pt; display: flex; justify-content: center; margin-top: 20%">Welcome <br> to <br> Japan!</h1>
   </section>
   
   <section id="pictures" class="palallax-no-image">
@@ -228,14 +255,115 @@
     </div>
   </section>
   
-  <footer style="display: block; background-color: #1c0304;">
+  <footer style="background-color: #1c0304;">
     <br>
-    <p style="display: flex; justify-content: center; color: gray;">made by bloodbern</p>
-    <div class="socials">
-      <button class="common-button" style="margin: 2px" onclick="gotoLink(this)" value="https://t.me/bloodbern">My Telegram</button>
-      <button class="common-button" style="margin: 2px" onclick="gotoLink(this)" value="https://instagram.com/bloodbern">My Instagram</button>
-      <button class="common-button" style="margin: 2px" onclick="window.open('mailto:bloodbern09@gmail.com', '_blank')">Send me Email</button>
-    </div>
+    <table align="center">
+      <tr>
+        <th>
+            <script>
+              function openNewWindow() {
+                openWin = open("socials.html", "displayWindow")
+              }
+            </script>
+            <button class="footer-button" onclick="openNewWindow()">Зворотній зв'язок</button><br>
+        </th>
+      </tr>
+    </table>
+    <p id="made-by" style="display: flex; justify-content: center; color: gray;">made by bloodbern</p>
+    <script>
+      const handler = event => {
+        setTimeout(() => {
+          if(window.scrollY + window.innerHeight < document.body.scrollHeight) {
+          return;
+        }
+
+        document.getElementById("made-by").classList.add("visible");
+        }, 5000);
+
+        removeEventListener('scroll', handler);
+      };
+
+      addEventListener('scroll', handler);
+
+
+
+
+
+
+//       const a = {
+//         abc: 12,
+//         hsdjgl: "43151"
+//       };
+
+//       console.log(a.abc);
+
+//       class WindowFrame {
+//         constructor() {
+//           this.frame =  document.getElementById("frame");
+//         }
+
+//         startResize() {
+// this.frame.style  ="";
+//         }
+//       }
+
+//       const frame = new WindowFrame();
+
+//       frame.startResize();
+
+//       frame.frame.style.add("");
+
+// const frames = [];
+// frames.push(frame);
+
+//       console.log(b.abc);
+
+
+
+
+
+
+//       const things = [
+//         {
+//           a: 1
+//         },
+//         {
+//           a: 2
+//         },
+//         {a: 3}
+//       ];
+
+//       for (const frame of frames) {
+//         frame.startResize();
+//       }
+
+
+
+      //методи об'єкта Document
+      // const browserInfoNames = [
+      //   "userAgent",
+      //   "appVersion"
+      // ];
+
+      // for (const name of browserInfoNames) {
+      //  const a = document.createElement("p");
+
+      //  p.innerText = navigator[name];
+
+      //  document.appendChild(p);
+      // }
+    </script>
+    
     <br>
+    <p id="userAgent"></p>
+    <p id="appVersion"></p>
+    <p id="appName"></p>
+    <p id="nav-language"></p>
+    <script>
+      document.getElementById('userAgent').innerText = navigator.userAgent;
+      document.getElementById('appVersion').innerText = navigator.appVersion;
+      document.getElementById('appName').innerText = navigator.appName;
+      document.getElementById('nav-language').innerText = navigator.language;
+    </script>
   </footer>
 </body>
