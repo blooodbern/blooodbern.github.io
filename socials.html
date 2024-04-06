@@ -19,10 +19,10 @@
         </tr>
         <tr>
             <th>
-                <button class="footer-button" style="margin: 2px" onclick="window.open('mailto:bloodbern09@gmail.com', '_blank')">Напишіть мені!</button><br>
+                <button class="footer-button" style="margin: 2px" onclick="window.open('mailto:bloodbern09@gmail.com', '_blank')">Напишіть мені!</button>
             </th>
             <th>
-                <button class="footer-button" style="margin: 2px" onclick="startGame()">Shall we play a game? :)</button><br>
+                <button id="play-button" class="footer-button" style="margin: 2px" onclick="startGame()"></button>
             </th>
         </tr>
     </table>
@@ -40,8 +40,12 @@
         const horizontalDamping = 1.03;
         const terminalVelocity = 50;
 
-        const spawnInterval = 2000;
+        const initialSpawnInterval = 1500;
+        const minSpawnInterval = 500;
+        const initialSpawnVariation = 1000;
+        const spawnIntervalSpeedUp = 10;
 
+        const playButton = document.getElementById("play-button");
         const game = document.getElementById("game");
         const foodItemsContainer = document.getElementById("food-items-container");
         const chopsticksContainer = document.getElementById("chopsticks-container");
@@ -51,25 +55,59 @@
         let foodItems = [];
         let caughtFoodItem = null;
 
+        let mainLoop = null;
+
         function startGame() {
-            setInterval(() => {
+            if(mainLoop) {
+                clearInterval(mainLoop);
+
+                mainLoop = null;
+
                 for (const foodItem of foodItems) {
-                    if(foodItem === caughtFoodItem) {
-                        continue;
+                    foodItem.despawn();
+                }
+
+                caughtFoodItem = null;
+            }
+
+            else {
+                let spawnInterval = initialSpawnInterval;
+                let spawnVariation = initialSpawnVariation;
+
+                let nextSpawnTimestamp = Date.now() + 500;
+
+                mainLoop = setInterval(() => {
+                    for (const foodItem of foodItems) {
+                        if(foodItem === caughtFoodItem) {
+                            continue;
+                        }
+
+                        foodItem.move();
                     }
 
-                    foodItem.move();
-                }
-            }, 16.666666);
+                    const timestamp = Date.now();
 
-            setInterval(() => {
-                const foodItem = new FoodItem();
+                    if(timestamp > nextSpawnTimestamp) {
+                        const foodItem = new FoodItem();
 
-                foodItem.spawn();
-            }, spawnInterval);
+                        foodItem.spawn();
 
-            game.classList.add("running");
+                        nextSpawnTimestamp = timestamp + spawnInterval + (Math.random() * spawnVariation);
+
+                        spawnInterval = Math.max(spawnInterval - spawnIntervalSpeedUp, minSpawnInterval);
+                        spawnVariation = Math.max(spawnVariation - spawnIntervalSpeedUp, 0);
+                    }
+                }, 16.666666);
+            }
+
+            game.classList.toggle("running");
+
+            updatePLayButtonText();
         }
+
+        function updatePLayButtonText() {
+            playButton.innerText = mainLoop === null ? "Shall we play a game? :)" : "I don't wanna play anymore :(";
+        };
 
         class FoodItem {
             constructor() {
@@ -168,8 +206,8 @@
 
         game.addEventListener("mousemove", event => {
             for (const chopstick of chopsticks) {
-                chopstick.style.left = `${event.clientX}px`;
-                chopstick.style.top = `${event.clientY}px`;
+                chopstick.style.left = `${Math.max(event.clientX, 0)}px`;
+                chopstick.style.top = `${Math.max(event.clientY, game.offsetTop + 60)}px`;
             }
 
             caughtFoodItem?.setPosition(event.clientX, event.clientY);
@@ -208,5 +246,7 @@
 
             caughtFoodItem?.release(event.movementX, event.movementY);
         });
+
+        updatePLayButtonText();
     </script>
 </body>
