@@ -396,20 +396,20 @@ div p {
 .chopstick {
     position: absolute;
     width: 400px;
-    height: 10px;
+    height: 8px;
     border-radius: 2px;
     background-color: #fd9264;
-    border: 2px solid #e26a37;
+    border-bottom: 3px solid #cb5b2c;
 }
 
 .chopstick:first-child {
     z-index: -1;
-    transform: translateY(-40px) translateX(-2px) rotate(-3deg);
-    transition: transform 100ms ease-in-out;
+    transform: translateY(-40px) translateX(2px) rotate(-3deg);
+    transition: transform 30ms ease-in-out;
 }
 
 .chopstick.grab:first-child {
-    transform: translateY(-20px) translateX(-5px) rotate(-2deg);
+    transform: translateY(-20px) translateX(-1px) rotate(-2deg);
 }
 
 #chopsticks-hitbox {
