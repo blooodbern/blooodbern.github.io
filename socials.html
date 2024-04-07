@@ -32,6 +32,7 @@
 
 		<div id="game">
 			<span id="game-time"></span>
+			<div id="health-display"></div>
 			<div id="food-items-container"></div>
 			<div id="chopsticks-container">
 				<div class="chopstick"></div>
@@ -41,6 +42,7 @@
 			</div>
 			<div id="right-wall"></div>
 			<div id="conveyor"></div>
+			<div id="low-hp-overlay"></div>
 		</div>
 
 		<script>
@@ -48,6 +50,7 @@
 			const horizontalDamping = 1.03;
 			const terminalVelocity = 50;
 
+			const initialHealth = 3;
 			const initialSpawnInterval = 1500;
 			const minSpawnInterval = 500;
 			const initialSpawnVariation = 1000;
@@ -58,17 +61,21 @@
 			const playButton = document.getElementById("play-button");
 			const game = document.getElementById("game");
 			const gameTime = document.getElementById("game-time");
+			const healthDisplay = document.getElementById("health-display");
 			const foodItemsContainer = document.getElementById("food-items-container");
 			const chopsticksContainer = document.getElementById("chopsticks-container");
 			const chopsticksHitbox = document.getElementById("chopsticks-hitbox");
 			const rightWall = document.getElementById("right-wall");
 			const conveyor = document.getElementById("conveyor");
+			const lowHpOverlay = document.getElementById("low-hp-overlay");
 
 			const chopsticks = chopsticksContainer.children;
 			let foodItems = [];
 			let caughtFoodItem = null;
 
 			let mainLoop = null;
+			let health = 0;
+			let gameStartTimestamp = 0;
 
 			function startGame() {
 				if (mainLoop) {
@@ -81,31 +88,26 @@
 					}
 
 					caughtFoodItem = null;
+
+					healthDisplay.replaceChildren([]);
+
+					lowHpOverlay.classList.remove("visible");
 				}
 
 				else {
-					const gameStartTimestamp = Date.now();
+					gameStartTimestamp = Date.now();
 
 					let spawnInterval = initialSpawnInterval;
 					let spawnVariation = initialSpawnVariation;
 
 					let nextSpawnTimestamp = gameStartTimestamp + 1000;
 
+					health = initialHealth;
+
 					mainLoop = setInterval(() => {
 						const timestamp = Date.now();
 
-						const milisecondsElapsed = timestamp - gameStartTimestamp;
-
-						gameTime.innerText = [
-							Math.floor(milisecondsElapsed / 60 / 60 / 1000),
-							Math.floor(milisecondsElapsed / 60 / 1000) % 60,
-							Math.floor(milisecondsElapsed / 1000) % 60,
-						]
-							.map((value) => String(value).padStart(2, "0"))
-							.filter((value, index) => value !== "00" || index > 0)
-							.join(":")
-							.concat(".")
-							.concat(String(milisecondsElapsed % 60).padStart(3, "0"));
+						gameTime.innerText = formatTime(timestamp - gameStartTimestamp);
 
 						for (const foodItem of foodItems) {
 							if (foodItem === caughtFoodItem) {
@@ -132,6 +134,14 @@
 							spawnVariation = Math.max(spawnVariation - spawnIntervalSpeedUp, 0);
 						}
 					}, 16.666666);
+
+					for (let i = 0; i < initialHealth; i++) {
+						const heart = document.createElement("img");
+
+						heart.src = "https://cdn-icons-png.flaticon.com/512/1762/1762755.png";
+
+						healthDisplay.appendChild(heart);
+					}
 				}
 
 				game.classList.toggle("running");
@@ -151,6 +161,19 @@
 					rect1.left < rect2.right &&
 					rect1.bottom > rect2.top &&
 					rect1.top < rect2.bottom;
+			}
+
+			function formatTime(miliseconds) {
+				return [
+					Math.floor(miliseconds / 60 / 60 / 1000),
+					Math.floor(miliseconds / 60 / 1000) % 60,
+					Math.floor(miliseconds / 1000) % 60,
+				]
+					.map((value) => String(value).padStart(2, "0"))
+					.filter((value, index) => value !== "00" || index > 0)
+					.join(":")
+					.concat(".")
+					.concat(String(miliseconds % 60).padStart(3, "0"))
 			}
 
 			class FoodItem {
@@ -190,6 +213,8 @@
 				spawn() {
 					foodItemsContainer.appendChild(this.image);
 					foodItems.push(this);
+
+					new Audio('sounds/woosh_s21KzKN.mp3').play();
 				}
 
 				move() {
@@ -198,7 +223,6 @@
 
 						this.image.style.left = `${this.image.offsetLeft + conveyorSpeed}px`;
 						this.image.style.bottom = `${conveyor.offsetHeight}px`;
-
 					}
 					else {
 						if (elementsOverlapping(rightWall, this.image)) {
@@ -244,9 +268,26 @@
 					this.despawn();
 
 					if (this.isOnConveyor) {
+						new Audio('sounds/anime-wow-sound-effect.mp3').play();
+
 						return;
 					}
-					console.log("lost health!");
+
+					healthDisplay.firstElementChild.remove();
+
+					new Audio('sounds/classic_hurt.mp3').play();
+
+					if (--health > 0) {
+						if (health === 1) {
+							lowHpOverlay.classList.add("visible");
+						}
+
+						return;
+					}
+
+					startGame();
+
+					alert(`You ded xD\nYou lasted: ${formatTime(Date.now() - gameStartTimestamp)}`);
 				}
 
 				despawn() {
