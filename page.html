@@ -36,7 +36,7 @@
             href: "language"
           }
         ];
-      
+        
         const menu = document.getElementById("menu");
 
         for (const menuItem of menuItems) {
@@ -276,13 +276,10 @@
           if(window.scrollY + window.innerHeight < document.body.scrollHeight) {
           return;
         }
-
         document.getElementById("made-by").classList.add("visible");
         }, 5000);
-
         removeEventListener('scroll', handler);
       };
-
       addEventListener('scroll', handler);
 
 
@@ -355,10 +352,28 @@
     </script>
     
     <br>
-    <p id="userAgent"></p>
-    <p id="appVersion"></p>
-    <p id="appName"></p>
-    <p id="nav-language"></p>
+    <table align="center" style="color: gray;">
+      <tr>
+        <th>
+          <p id="userAgent"></p>
+        </th>
+      </tr>
+      <tr>
+        <th>
+          <p id="appVersion"></p>
+        </th>
+      </tr>
+      <tr>
+        <th>
+          <p id="appName"></p>
+        </th>
+      </tr>
+      <tr>
+        <th>
+          <p id="nav-language"></p>
+        </th>
+      </tr>
+    </table>
     <script>
       document.getElementById('userAgent').innerText = navigator.userAgent;
       document.getElementById('appVersion').innerText = navigator.appVersion;
