@@ -19,36 +19,36 @@
       </ul>
       <script>
         const menuItems = [
-        {
-          text: "Краєвиди",
-          href: "pictures"
-        },
-        {
-          text: "Історія",
-          href: "history"
-        },
-        {
-          text: "Їжа",
-          href: "food"
-        },
-        {
-          text: "Мова",
-          href: "language"
-        }
-      ];
+          {
+            text: "Краєвиди",
+            href: "pictures"
+          },
+          {
+            text: "Історія",
+            href: "history"
+          },
+          {
+            text: "Їжа",
+            href: "food"
+          },
+          {
+            text: "Мова",
+            href: "language"
+          }
+        ];
       
-const menu = document.getElementById("menu");
+        const menu = document.getElementById("menu");
 
-for (const menuItem of menuItems) {
-	const li = document.createElement("li");
-	const a = document.createElement("a");
+        for (const menuItem of menuItems) {
+          const li = document.createElement("li");
+          const a = document.createElement("a");
 
-	a.innerText = menuItem.text;
-	a.href = menuItem.href;
+          a.innerText = menuItem.text;
+          a.href = `#${menuItem.href}`;
 
-	li.appendChild(a);
-	menu.appendChild(li);
-}
+          li.appendChild(a);
+          menu.appendChild(li);
+        }
       </script>
     </div>
   </nav>
