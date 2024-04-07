@@ -376,6 +376,7 @@ div p {
 
 /* ---------------------------- minigame ---------------------------- */
 #game {
+    position: relative;
     visibility: hidden;
     border: 4px solid #cb5b2c;
     background-color: #351709;
@@ -383,6 +384,13 @@ div p {
 
 #game.running {
     visibility: visible;
+}
+
+#game-time {
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translate(-50%, 0);
 }
 
 #game,
@@ -427,8 +435,19 @@ div p {
     /* background-color: red; */
 }
 
+#right-wall {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    height: 80%;
+    width: 10px;
+    background-color: dimgray;
+}
+
 #conveyor {
     position: absolute;
+    bottom: 0px;
+    right: 0px;
     width: 30%;
     height: 40px;
     background-color: red;

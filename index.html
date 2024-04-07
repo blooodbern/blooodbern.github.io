@@ -36,28 +36,29 @@
 							href: "language"
 						}
 					];
-	
+
 					const menu = document.getElementById("menu");
-	
+
 					for (const menuItem of menuItems) {
 						const li = document.createElement("li");
 						const a = document.createElement("a");
-	
+
 						a.innerText = menuItem.text;
 						a.href = `#${menuItem.href}`;
-	
+
 						li.appendChild(a);
 						menu.appendChild(li);
 					}
 				</script>
 			</div>
 		</nav>
-	
+
 		<section id="start" class="parallax-1">
 			<h1 style="color: #4a1f0c; font-size: 30pt; display: flex; justify-content: center; margin-top: 20%">Welcome
-				<br> to <br> Japan!</h1>
+				<br> to <br> Japan!
+			</h1>
 		</section>
-	
+
 		<section id="pictures" class="palallax-no-image">
 			<h1>В Японії багато мальовничих місць!</h1>
 			<div>
@@ -146,7 +147,7 @@
 				</p>
 			</div>
 		</section>
-	
+
 		<section id="history" class="parallax-2">
 			<h1 style="display: flex; justify-content: center; font-size: 32px;">Історія Японії</h1>
 			<div style="font-weight: bold; display: grid; place-items: center">
@@ -196,7 +197,7 @@
 			<img src="img/history-photo-1.jpg" style="display: inline; width: 500px; height: 250px;">
 			<img src="img/history-photo-2.jpg" style="display: inline; width: 500px; height: 250px;">
 		</section>
-	
+
 		<section id="food" class="palallax-no-image">
 			<h1>Їжа Японії</h1>
 			<div>
@@ -234,7 +235,7 @@
 				</div>
 			</div>
 		</section>
-	
+
 		<section id="language" class="parallax-3">
 			<h1 style="display: flex; justify-content: center; font-size: 32px;">Мова Японії</h1>
 			<div style="display: grid; place-items: center; font-weight: bold">
@@ -279,7 +280,7 @@
 				</p>
 			</div>
 		</section>
-	
+
 		<footer style="background-color: #1c0304;">
 			<br>
 			<table align="center">
@@ -295,22 +296,23 @@
 				</tr>
 			</table>
 			<p id="made-by" style="display: flex; justify-content: center; color: gray;">made by bloodbern</p>
+
 			<script>
 				const handler = event => {
 					if (window.scrollY + window.innerHeight < document.body.scrollHeight) {
 						return;
 					}
-	
+
 					setTimeout(() => {
 						document.getElementById("made-by").classList.add("visible");
 					}, 1000);
-	
+
 					removeEventListener('scroll', handler);
 				};
-	
+
 				addEventListener('scroll', handler);
 			</script>
-	
+
 			<br>
 			<table align="center" style="color: gray;">
 				<tr>
