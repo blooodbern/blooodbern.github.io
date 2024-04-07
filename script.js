@@ -7,6 +7,8 @@ function topFunction() {
 function bottomFunction() {
 	document.documentElement.scrollTop = document.documentElement.scrollHeight;
 }
+
+document.title = "Japan Site"; //document title значення загальних властивостей
 // window.addEventListener("scroll", () => {
 // 	if (window.scrollY > 1) {
 // 		downBtn.style.visibility = "hidden";
