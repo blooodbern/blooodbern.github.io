@@ -393,12 +393,15 @@ div p {
 #game-time {
     top: 0px;
     left: 50%;
+    padding: 5px;
+    font-size: 1.2em;
+    font-family: "Courier New", Courier, monospace;
     transform: translate(-50%, 0);
 }
 
 #health-display {
     top: 0px;
-    right: 0px;
+    right: 10px;
     margin: 10px;
 }
 
@@ -452,17 +455,47 @@ div p {
 #right-wall {
     right: 0px;
     top: 0px;
-    height: 80%;
-    width: 10px;
-    background-color: dimgray;
+    height: 75%;
+    width: 12px;
+    background-color: #423c3c;
+    border-left: 5px solid #4e4646;
 }
 
 #conveyor {
-    bottom: 0px;
-    right: 0px;
-    width: 30%;
-    height: 40px;
-    background-color: red;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    bottom: 4px;
+    right: 4px;
+    width: 35%;
+    height: 45px;
+    border-radius: 25px;
+    background-color: #382c2c;
+    outline: 4px solid #1a1414;
+}
+
+.conveyor-wheel {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background-color: #594e4e;
+    border: 3px dashed #423c3c;
+    animation: rotating 2s linear infinite;
+}
+
+@keyframes rotating {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.conveyor-wheel > div {
+    margin: 12px;
+    aspect-ratio: 1;
+    border-radius: 60% / 70% 0%;
+    background-color: #281f1f;
 }
 
 #low-hp-overlay {
