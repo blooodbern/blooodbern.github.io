@@ -377,9 +377,10 @@ div p {
 /* ---------------------------- minigame ---------------------------- */
 #game {
     position: relative;
-    visibility: hidden;
+    visibility: collapse;
     border: 4px solid #cb5b2c;
-    background-color: #351709;
+    background-color: #381b0d;
+    user-select: none;
 }
 
 #game.running {
@@ -410,6 +411,51 @@ div p {
     margin: 5px;
 }
 
+#ramen-sign-container {
+    display: flex;
+    align-items: stretch;
+    top: 15px;
+}
+
+#ramen-sign-mount {
+    width: 20px;
+    margin: 10px 0px;
+    border: 6px solid #4e4646;
+    border-left-width: 0px;
+    border-right-width: 0px;
+}
+
+#ramen-sign {
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    font-size: 2.5em;
+    font-weight: bold;
+    background-color: #cb5b2c;
+    border-radius: 5px;
+    padding: 20px 0px;
+    border: 4px solid #5a3424;
+}
+
+#shop {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    bottom: 0px;
+    height: 35%;
+}
+
+#shop-counter {
+    width: 30px;
+    height: 15px;
+    background-color: #592a17;
+}
+
+#shop-wall {
+    width: 15px;
+    flex-grow: 1;
+    background-color: #754430;
+}
+
 #game,
 #food-items-container {
     height: 100%;
@@ -417,7 +463,6 @@ div p {
 
 .game-food-item {
     position: absolute;
-    user-select: none;
     z-index: 1;
 }
 
@@ -467,7 +512,7 @@ div p {
     justify-content: space-between;
     bottom: 4px;
     right: 4px;
-    width: 35%;
+    width: 30%;
     height: 45px;
     border-radius: 25px;
     background-color: #382c2c;
