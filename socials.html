@@ -61,22 +61,22 @@
 		</div>
 
 		<script>
-			// Global constants
-			const gravity = 2; // fall acceleration, px/frame
-			const horizontalDamping = 0.97; // horizontal speed reduction factor
-			const terminalVelocity = 50; // max fall speed, px/frame
-			const inertialMultiplier = 1.3;
+			//Глобальні константи
+			const gravity = 2; //прискорення вільного падіння, px/frame
+			const horizontalDamping = 0.97; //коефіцієнт зниження горизонтальної швидкості
+			const terminalVelocity = 50; //максимальна швидкість падіння, px/frame
+			const inertialMultiplier = 1.3; //при відпусканні предмету швидкість трошки збільшується
 
 			const initialHealth = 3;
 
-			const initialSpawnInterval = 1500; // base delay between spawns, ms
-			const minSpawnInterval = 500; // minimal delay between spawns, ms
-			const initialSpawnVariation = 1000; // maximum additional delay between spawns, ms
-			const spawnIntervalSpeedUp = 10; // value, by which spawnInterval and spawnVariation are reduced after each spawn, ms
+			const initialSpawnInterval = 1500; //базова затримка спавну, ms
+			const minSpawnInterval = 500; //мінімальна затримка спавну, ms
+			const initialSpawnVariation = 1000; //максимальна додаткова затримка спавну, ms
+			const spawnIntervalSpeedUp = 10; //значення, на яке spawnInterval і spawnVariation зменшуються після кожного спавну, ms
 
-			const conveyorSpeed = 3; // horizontal speed of items on the conveyor, px/frame
+			const conveyorSpeed = 3; //горизонтальна швидкість конвеєра, px/frame
 
-			// Grab all required html elements
+			//дістаємо всі необхідні елементи з html
 			const playButton = document.getElementById("play-button");
 			const game = document.getElementById("game");
 			const gameTime = document.getElementById("game-time");
@@ -88,125 +88,125 @@
 			const conveyor = document.getElementById("conveyor");
 			const lowHpOverlay = document.getElementById("low-hp-overlay");
 
-			// Initialize global game variables
-			let foodItems = []; // Array of spawned FoodItems
-			let caughtFoodItem = null; // FoodItem, currently attached to the chopsticks
+			//ініціалізуємо глобальні змінні
+			let foodItems = []; //Масив FoodItems
+			let caughtFoodItem = null; //FoodItem, що зараз прикріплений до паличок
 
-			let mainLoop = null; // id of the main game interval
-			let health = 0; // Current health
-			let gameStartTimestamp = 0; // Timestamp at the beginning of the game, ms
+			let mainLoop = null; //id основного ігрового інтервалу
+			let health = 0; //поточне здоров'я
+			let gameStartTimestamp = 0; //точний час початку гри, ms
 
-			// Called when pressing the Play Button
+			//фукнція старту гри, викликається при натисканні кнопки
 			function startGame() {
-				// If main loop was initialized (the game is running):
+				//якщо основний цикл ініціалізовано (гра запущена):
 				if (mainLoop) {
-					// Stop the game:
-					// Clear the main loop
+					//зупиняємо гру:
+					//---очищаємо основний цикл
 					clearInterval(mainLoop);
 
 					mainLoop = null;
 
-					// Despawn all FoodItems
+					//задеспавнимо всі FoodItems
 					for (const foodItem of foodItems) {
 						foodItem.despawn();
 					}
-					// Clear currently held FoodItem
+					//очищаємо утримуваний FoodItem
 					caughtFoodItem = null;
-					// Clear all hearts
+					//очищаємо всі серця
 					healthDisplay.replaceChildren([]);
-					// Hide the red overlay
+					//приховуємо червоний оверлей
 					lowHpOverlay.classList.remove("visible");
 				}
-				// If it wasn't (the game is not running):
+				//якщо основний цикл НЕ ініціалізовано (гра НЕ запущена):
 				else {
-					// Start the game:
-					// Record current timestamp
+					//розпочинаємо гру:
+					//записуємо поточний точний час
 					gameStartTimestamp = Date.now();
 
-					// Initialize base spawn interval and variation using the constants
+					//ініціалізуємо базовий інтервал спавну та варіацію за допомогою констант
 					let spawnInterval = initialSpawnInterval;
 					let spawnVariation = initialSpawnVariation;
 
-					// Initialize the next spawn timestamp (1 s from now)
+					//ініціалізуємо наступну позначки часу появи (через 1 с)
 					let nextSpawnTimestamp = gameStartTimestamp + 1000;
 
-					// Init health
+					//ініціалізуємо здоров'я
 					health = initialHealth;
 
-					// Start and assign main loop (function runs every frame)
+					//запуск і призначення основного циклу (функція запускається кожен кадр)
 					mainLoop = setInterval(() => {
-						const timestamp = Date.now(); // Grab current timestamp
+						const timestamp = Date.now(); //беремо поточну позначку часу
 
-						// Refresh game time
+						//оновлюємо час гри
 						gameTime.innerText = formatTime(timestamp - gameStartTimestamp);
 
-						// Iterate over FoodItems
+						//переглядаємо FoodItems
 						for (const foodItem of foodItems) {
-							// If FoodItem is currently held by chopsicks - do nothing
+							//якщо FoodItem зараз утримується палочками - нічого не робити
 							if (foodItem === caughtFoodItem) {
 								continue;
 							}
-							// Otherwise:
-							foodItem.move(); // move the item
+							//інакше:
+							foodItem.move(); //перемістити предмет
 
-							// If FoodItem is NOT already on the conveyor and isn't overlapping it - do nothing
+							//якщо FoodItem ще НЕ на конвеєрі і не перекриває його - нічого не робити
 							if (foodItem.isOnConveyor || !elementsOverlapping(foodItem.image, conveyor)) {
 								continue;
 							}
-							// Otherwise: set isOnConveyor
+							//інакше: встановлюємо isOnConveyor
 							foodItem.isOnConveyor = true;
 						}
 
-						// If current time is greater than the spawn timestamp:
+						//якщо поточний час більший за мітку часу появи:
 						if (timestamp > nextSpawnTimestamp) {
-							// Spawn the item:
-							const foodItem = new FoodItem(); // Create object of the FoodItem class
+							//спавнимо предмет
+							const foodItem = new FoodItem(); //створюємо об'єкт класу FoodItem
 
-							foodItem.spawn(); // call spawn method
+							foodItem.spawn(); //викликаємо метод spawn
 
-							// Prepare the next spawn timestamp:
-							// current time + spawn interval + [0 - spawn variation]
-							// for example: 2375274356982 + 1500 + 643
+							//готуємо наступну мітку часу появи:
+							//поточний час + інтервал появи + [0 - варіант появи]
+							//наприклад: 2375274356982 + 1500 + 643
 							nextSpawnTimestamp = timestamp + spawnInterval + (Math.random() * spawnVariation);
 
-							// Reduce the spawn interval and variation by spawnIntervalSpeedUp
+							//зменшуємо інтервал появи та варіацію за допомогою spawnIntervalSpeedUp
 							//
-							//    make sure it is not below minimum interval
+							//    переконуємось, що він не нижче мінімального інтервалу
 							//                     |
 							//                    \/
 							spawnInterval = Math.max(spawnInterval - spawnIntervalSpeedUp, minSpawnInterval);
 							spawnVariation = Math.max(spawnVariation - spawnIntervalSpeedUp, 0);
 						}
-					}, 16.666666); // Run at 60 FPS (1000 ms / 60 frames - interval of 16.6(6) ms)
+					}, 16.666666); // оброблюємо в 60 фпс (1000 ms / 60 frames - interval of 16.6(6) ms)
 
-					// Finally, create the health icons
+					//створюємо піктограми здоров’я
 					for (let i = 0; i < initialHealth; i++) {
-						// Create img HTML element
+						//створюємо HTML-елемент
 						const heart = document.createElement("img");
 
-						// Assign icon source
+						//призначаємо джерело значка
 						heart.src = "https://cdn-icons-png.flaticon.com/512/1762/1762755.png";
 
-						// Insert into health container
+						//вставляємо в "контейнер" здоров'я
 						healthDisplay.appendChild(heart);
 					}
 				}
 
-				// Regardless of game state:
-				// Toggle the visibility of the game area
-				game.classList.toggle("running"); // jf "running" is already in class list - remove it, otherwise - add it
+				//Незалежно від стану гри:
+				//перемикаємо видимість ігрової зони
+				game.classList.toggle("running"); //якщо "running" вже є в списку класів - видаляємо його, інакше - додаємо
 
 				updatePlayButtonText();
 			}
 
 			function updatePlayButtonText() {
-				// Use ternary operator to change the text inside the Play Button
+				//використовуємо тернарний оператор, щоб змінити текст всередині кнопки Play
 				playButton.innerText = mainLoop ? "I don't wanna play anymore :(" : "Shall we play a game? :)";
 			};
 
-			// This function check if an element is located above (on z-axis) the other element
+			//функція перевіряє, чи розташований елемент вище (на осі z) іншого елемента
 			function elementsOverlapping(element1, element2) {
-				// getBoundingClientRect - returns coordinates of 4 sides of an HTML element (left, right, top, bottom)
+				//getBoundingClientRect - повертає координати 4 сторін елемента HTML (зліва, справа, зверху, знизу)
 				const rect1 = element1.getBoundingClientRect();
 				const rect2 = element2.getBoundingClientRect();
 
@@ -216,47 +216,47 @@
 					rect1.top < rect2.bottom;
 			}
 
-			// Convert time in ms into: "HH:MM:SS.sss" (ISO 8601)
+			//перетворюємо час у мілісекундах на "HH:MM:SS.sss" (ISO 8601)
 			function formatTime(milliseconds) {
-				return [ // 1. Create an array, fill with hours, minutes and seconds extracted from the timestamp 
+				return [ // 1. створюємо масив, заповнюємо години, хвилини та секунди, витягнуті з позначки часу
 					Math.floor(milliseconds / 60 / 60 / 1000),
 					Math.floor(milliseconds / 60 / 1000) % 60,
 					Math.floor(milliseconds / 1000) % 60,
 				]
-					.map((value) => String(value).padStart(2, "0")) // 2. Cast each value to string, add leading zeros
-					.filter((value, index) => value !== "00" || index > 0) // 3. Discard hours, if the value is "00"
-					.join(":") // 4. Combine hours, minutes and seconds to string: "HH:MM:SS"
-					.concat(".") // 5. Add a period: "HH:MM:SS."
-					.concat(String(milliseconds % 60).padStart(3, "0")) // 6. Add miliseconds, padded with leading zeros
+					.map((value) => String(value).padStart(2, "0")) // 2. перетворюємо кожне значення в рядок, додаємо початкові нулі
+					.filter((value, index) => value !== "00" || index > 0) // 3. відкидуємо години, якщо значення дорівнює "00"
+					.join(":") // 4. об’єднуємо години, хвилини та секунди в рядок: "HH:MM:SS"
+					.concat(".") // 5. додаємо крапку: "HH:MM:SS."
+					.concat(String(milliseconds % 60).padStart(3, "0")) // 6. додаємо мілісекунди, з початковими нулями
 			}
 
 			class FoodItem {
 				constructor() {
-					// Init an array with possible image sources
+					//ініціалізація масиву з джерелами зображень
 					const images = [
 						"https://cdn-icons-png.flaticon.com/512/3259/3259041.png",
 						"https://cdn-icons-png.flaticon.com/512/2515/2515345.png",
 						"https://cdn-icons-png.flaticon.com/512/2718/2718224.png",
 						"https://cdn-icons-png.flaticon.com/512/3361/3361870.png",
 						"https://cdn-icons-png.flaticon.com/512/2713/2713962.png"
-					].toSorted(() => 0.5 - Math.random()); // <- sort randomly xD
+					].toSorted(() => 0.5 - Math.random()); // <- "випадково" сортуємо
 
-					// Length of the side of the image
+					//довжина сторони зображення
 					const width = 80;
 
-					// Create and init the image element
+					//створюємо і запускаємо елемент зображення
 					const image = document.createElement("img");
 					image.classList.add("game-food-item");
 					image.src = images[0];
 					image.style.width = `${width}px`;
 					image.style.top = `${Math.random() * (foodItemsContainer.clientHeight / 2)}px`; // set random vertical position
 
-					// Assign variables to this object
+					//призначаємо змінні цьому об’єкту
 					this.image = image;
 
 					this.size = width;
 
-					// Set random initial velocity
+					//встановлюємо випадкову початкову швидкість
 					this.velocity = {
 						x: 5 + Math.random() * 10,
 						y: -10 - (Math.random() * 20)
@@ -269,115 +269,114 @@
 					this.isOnConveyor = false;
 				}
 
-				// Spawns the FoodItem into the game area
+				//спавнимо FoodItem у ігровій зоні
 				spawn() {
-					foodItemsContainer.appendChild(this.image); // Insert into food items container
-					foodItems.push(this); // Add to food items array
+					foodItemsContainer.appendChild(this.image); //втсалвєяом в контейнер FoodItem
+					foodItems.push(this); //додаємо до масиву продуктів харчування
 
-					new Audio('sounds/woosh_s21KzKN.mp3').play(); // Play sound effect :3
+					new Audio('sounds/woosh_s21KzKN.mp3').play(); //відтворити звуковий ефект
 				}
 
-				// Uses "pHySiCs" to move the item
+				//присвоюємо "фізику" щоб переміщати предмет
 				move() {
-					// If on conveyor:
+					//якщо на конвеєрі:
 					if (this.isOnConveyor) {
-						// Will be using style.bottom from now on
+						//використовуватимуться style.bottom
 						this.image.style.top = null;
 
-						// Move slightly to the right
+						//перемістити трохи вправо
 						this.image.style.left = `${this.image.offsetLeft + conveyorSpeed}px`;
-						// Ensure the item is on the conveyor
+						//переконуємось, що предмет знаходиться на конвеєрі
 						this.image.style.bottom = `${conveyor.offsetHeight}px`;
 					}
-					// Otherwise:
+					//інакше:
 					else {
-						// Check if we are touching the Right Wall:
+						//переконуємось, чи торкаємося ми правої стіни:
 						if (elementsOverlapping(rightWall, this.image)) {
-							// If so, set the velocity to make a nice bounce
+							//якщо так, встановлюємо швидкість, щоб зробити відскок
 							this.velocity = {
 								x: -25,
 								y: -55
 							};
 						}
 
-						// Update the position of the FoodItem
+						//оновлюємо позицію FoodItem
 						this.image.style.left = `${this.image.offsetLeft + this.velocity.x}px`;
 						this.image.style.top = `${this.image.offsetTop + this.velocity.y}px`;
 
-						// Apply damping (or drag) to horizontal movement
+						//застосовуємо перетягування до горизонтального руху
 						this.velocity.x *= horizontalDamping;
-						// Add gravity and make sure the speed is below the terminal velocity
+						//додаємо силу тяжіння та переконуємось, що швидкість нижча від кінцевої
 						this.velocity.y = Math.min(this.velocity.y + gravity, terminalVelocity);
 					}
 
-					// After the movement is done, check if item needs to be despawned
+					//після завершення руху перевіряємо, чи потрібно деспавнити предмет
 					this.tryDespawn();
 				}
 
-				// Manually updates the FoodItem position
+				//вручну оновлюємо позицію FoodItem
 				setPosition(x, y) {
-					// First, move the item to specified coords
+					//по-перше, переміщаємо предмет у вказані координати
 					this.image.style.left = `${x - this.size / 2}px`;
 					this.image.style.top = `${y - this.size / 2}px`;
 
-					// Record the new position
+					//записуємо нову позицію
 					const newGrabPosition = {
 						x: this.image.offsetLeft,
 						y: this.image.offsetTop
 					};
-					// Subtract from previous position
+					//віднімаємо з попередньої позиції
 					this.velocity = {
 						x: (newGrabPosition.x - this.previousGrabPosition.x) * inertialMultiplier,
 						y: (newGrabPosition.y - this.previousGrabPosition.y) * inertialMultiplier
 					};
-					// Update the current position
+					//оновлюємо поточну позицію
 					this.previousGrabPosition = newGrabPosition;
 
-					// Try despawning
+					//перевіряємо, чи потрібно деспавнити предмет
 					this.tryDespawn();
 				}
 
 				tryDespawn() {
-					// If the item is inside the game area - do nothing
+					//якщо предмет знаходиться всередині ігрової зони - нічого не робимо
 					if (this.image.offsetTop < game.clientHeight &&
 						this.image.offsetLeft < game.clientWidth) {
 						return;
 					}
-					// Otherwise - despawn
+					//інакше - деспавним
 					this.despawn();
 
-					// Now, let's see if we lost any health:
-					// If the item is on the conveyor - play the "good" sound effect and end at that
-					// This basically means, that item was moved outside of the game area by the conveyor
+					//дивимось, чи втратили ми здоров’я:
+					//якщо предмет стоїть на конвеєрі - вмикаємо звуковий ефект і закінчуємо на цьому
+					//тобто, цей предмет було переміщено за межі ігрової зони конвеєром
 					if (this.isOnConveyor) {
 						new Audio('sounds/anime-wow-sound-effect.mp3').play();
 
 						return;
 					}
-					// Otherwise, do the bad things (item has fallen out of the game area):
-					// Remove 1 health icon
+					//інакше, якщо предмет випав за межі ігрової зони:
+					//забираємо одне очко здоров'я
 					healthDisplay.firstElementChild.remove();
 
-					// Play the "bad" sound effect
+					//програємо звук "програшу"
 					new Audio('sounds/classic_hurt.mp3').play();
 
-					// Check if we still have some health
+					//перевіряємо наявність сердець
 					if (--health > 0) {
-						// If we do, and only 1 heart is left ...
+						//якщо серця є, і воно лише одне ->
 						if (health === 1) {
-							// ... show the low health warning overlay
+							// -> показуємо оверлей низького здоров'я
 							lowHpOverlay.classList.add("visible");
 						}
-						// End it at that
 						return;
 					}
-					// Otherwise (meaning we lost all of our health), end the game
+					//інакше, якщо ми втратили всі серця, закінчуємо гру
 					startGame();
-					// And show the game over dialog
-					alert(`You ded xD\nYou lasted: ${formatTime(Date.now() - gameStartTimestamp)}`);
+					//показуємо діалогове вікно
+					alert(`You are lost!\nYou lasted: ${formatTime(Date.now() - gameStartTimestamp)}`);
 				}
 
-				// Removes the FoodItem from the container and the array
+				//вилучаємо FoodItem з контейнера та масиву
 				despawn() {
 					foodItemsContainer.removeChild(this.image);
 					foodItems = foodItems.filter(foodItem => foodItem !== this);
@@ -399,30 +398,30 @@
 				}
 			}
 
-			// Now let's add some event handlers:
-			// This one is called whenever we move the mouse inside the game area
+			//обробники подій:
+			//викликається щоразу, коли ми переміщуємо мишу в ігрову область
 			game.addEventListener("mousemove", event => {
-				// Calculate the cursor coords inside the game area
+				//вираховуємо координати курсору в ігровій зоні
 				const cursorPosition = {
 					x: event.clientX - game.offsetLeft,
 					y: event.clientY - game.offsetTop
 				};
-				// Then, update the chopsticks position
+				//оновлюємо позицію паличок
 				for (const chopstick of chopsticksContainer.children) {
 					chopstick.style.left = `${Math.max(cursorPosition.x, 0)}px`;
 					chopstick.style.top = `${Math.max(cursorPosition.y, 60)}px`;
 				}
-				// If a FoodItem is being held by the chopsticks - update it's position
-				// We use optional chaining for that - essentially this is checking if the
-				// caughtFoodItem is null/undefined before calling the function
-				// Equivalent to:
-				// if(caughtFoodItem !== null) {
-				//     caughtFoodItem.blahBlahBlah();
-				// }
+				//
+				//
+				//якщо FoodItem утримується паличками для їжі, оновлюємо його положення
+				//і використовуємо необов’язковий процес – по суті, це перевірка, чи
+				//caughtFoodItem має значення null/undefined перед викликом функції
+				//
+				//
 				caughtFoodItem?.setPosition(cursorPosition.x, cursorPosition.y);
 			});
 
-			// Next 2 event listeners are used to show/hide the mouse cursor when exiting/entering the game area
+			//використовуються, щоб показати/приховати курсор миші під час виходу/входу в ігрову зону
 			game.addEventListener("mouseenter", event => {
 				game.style.cursor = "none";
 			});
@@ -430,36 +429,36 @@
 				game.style.cursor = null;
 			});
 
-			// When a mouse button is pressed:
+			//кнопку миші натиснуто:
 			game.addEventListener("mousedown", event => {
-				// Again, calculate the cursor coords inside the game area
+				//обраховуємо координати курсору в ігровій зоні
 				const cursorPosition = {
 					x: event.clientX - game.offsetLeft,
 					y: event.clientY - game.offsetTop
 				};
 
-				// Play the grab animation on the chopsticks
+				//відтворюємо анімацію "хапання"
 				chopsticksContainer.firstElementChild.classList.add("grab");
 
-				// Iterate over all of the FoodItems
+				//ітеруємо всі FoodItems
 				for (const foodItem of foodItems) {
 					if (!elementsOverlapping(chopsticksHitbox, foodItem.image)) {
 						continue;
 					}
-					// If a FoodItem is overlapping the chopsticks hitbox - catch it
+					//якщо FoodItem накладається на хітбокс паличок - хапаємо предмет
 					foodItem.catch(cursorPosition.x, cursorPosition.y);
 				}
 			});
 
-			// When releasing the mouse button:
+			//кнопку миші відпущено:
 			game.addEventListener("mouseup", event => {
-				// Stop the grab animation
+				//зупиняємо анімацію "хапання"
 				chopsticksContainer.firstElementChild.classList.remove("grab");
-				// And release a caught FoodItem, if there is one
+				//відпускаємо предмет в паличках, якщо він є
 				caughtFoodItem?.release(event.movementX, event.movementY);
 			});
 
-			// Finally, display the initial text on the Play Button
+			//відображаємо початковий текст на кнопці відтворення
 			updatePlayButtonText();
 		</script>
 	</body>
