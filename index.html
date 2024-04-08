@@ -41,12 +41,9 @@
 
 					for (const menuItem of menuItems) {
 						const li = document.createElement("li");
-						const a = document.createElement("a");
 
-						a.innerText = menuItem.text;
-						a.href = `#${menuItem.href}`;
+						li.innerHTML = menuItem.text.link(`#${menuItem.href}`);
 
-						li.appendChild(a);
 						menu.appendChild(li);
 					}
 				</script>

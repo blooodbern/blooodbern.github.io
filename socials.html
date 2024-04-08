@@ -46,18 +46,21 @@
 		</div>
 
 		<script>
-			const gravity = 2;
-			const horizontalDamping = 1.03;
-			const terminalVelocity = 50;
+			// Global constants
+			const gravity = 2; // fall acceleration, px/frame
+			const horizontalDamping = 0.97; // horizontal speed reduction factor
+			const terminalVelocity = 50; // max fall speed, px/frame
 
 			const initialHealth = 3;
-			const initialSpawnInterval = 1500;
-			const minSpawnInterval = 500;
-			const initialSpawnVariation = 1000;
-			const spawnIntervalSpeedUp = 10;
 
-			const conveyorSpeed = 3;
+			const initialSpawnInterval = 1500; // base delay between spawns, ms
+			const minSpawnInterval = 500; // minimal delay between spawns, ms
+			const initialSpawnVariation = 1000; // maximum additional delay between spawns, ms
+			const spawnIntervalSpeedUp = 10; // value, by which spawnInterval and spawnVariation are reduced after each spawn, ms
 
+			const conveyorSpeed = 3; // horizontal speed of items on the conveyor, px/frame
+
+			// Grab all required html elements
 			const playButton = document.getElementById("play-button");
 			const game = document.getElementById("game");
 			const gameTime = document.getElementById("game-time");
@@ -69,91 +72,125 @@
 			const conveyor = document.getElementById("conveyor");
 			const lowHpOverlay = document.getElementById("low-hp-overlay");
 
-			const chopsticks = chopsticksContainer.children;
-			let foodItems = [];
-			let caughtFoodItem = null;
+			// Initialize global game variables
+			let foodItems = []; // Array of spawned FoodItems
+			let caughtFoodItem = null; // FoodItem, currently attached to the chopsticks
 
-			let mainLoop = null;
-			let health = 0;
-			let gameStartTimestamp = 0;
+			let mainLoop = null; // id of the main game interval
+			let health = 0; // Current health
+			let gameStartTimestamp = 0; // Timestamp at the beginning of the game, ms
 
+			// Called when pressing the Play Button
 			function startGame() {
+				// If main loop was initialized (the game is running):
 				if (mainLoop) {
+					// Stop the game:
+					// Clear the main loop
 					clearInterval(mainLoop);
 
 					mainLoop = null;
 
+					// Despawn all FoodItems
 					for (const foodItem of foodItems) {
 						foodItem.despawn();
 					}
-
+					// Clear currently held FoodItem
 					caughtFoodItem = null;
-
+					// Clear all hearts
 					healthDisplay.replaceChildren([]);
-
+					// Hide the red overlay
 					lowHpOverlay.classList.remove("visible");
 				}
-
+				// If it wasn't (the game is not running):
 				else {
+					// Start the game:
+					// Record current timestamp
 					gameStartTimestamp = Date.now();
 
+					// Initialize base spawn interval and variation using the constants
 					let spawnInterval = initialSpawnInterval;
 					let spawnVariation = initialSpawnVariation;
 
+					// Initialize the next spawn timestamp (1 s from now)
 					let nextSpawnTimestamp = gameStartTimestamp + 1000;
 
+					// Init health
 					health = initialHealth;
 
+					// Start and assign main loop (function runs every frame)
 					mainLoop = setInterval(() => {
-						const timestamp = Date.now();
+						const timestamp = Date.now(); // Grab current timestamp
 
+						// Refresh game time
 						gameTime.innerText = formatTime(timestamp - gameStartTimestamp);
 
+						// Iterate over FoodItems
 						for (const foodItem of foodItems) {
+							// If FoodItem is currently held by chopsicks - do nothing
 							if (foodItem === caughtFoodItem) {
 								continue;
 							}
+							// Otherwise:
+							foodItem.move(); // move the item
 
-							foodItem.move();
-
+							// If FoodItem is NOT already on the conveyor and isn't overlapping it - do nothing
 							if (foodItem.isOnConveyor || !elementsOverlapping(foodItem.image, conveyor)) {
 								continue;
 							}
-
+							// Otherwise: set isOnConveyor
 							foodItem.isOnConveyor = true;
 						}
 
+						// If current time is greater than the spawn timestamp:
 						if (timestamp > nextSpawnTimestamp) {
-							const foodItem = new FoodItem();
+							// Spawn the item:
+							const foodItem = new FoodItem(); // Create object of the FoodItem class
 
-							foodItem.spawn();
+							foodItem.spawn(); // call spawn method
 
+							// Prepare the next spawn timestamp:
+							// current time + spawn interval + [0 - spawn variation]
+							// for example: 2375274356982 + 1500 + 643
 							nextSpawnTimestamp = timestamp + spawnInterval + (Math.random() * spawnVariation);
 
+							// Reduce the spawn interval and variation by spawnIntervalSpeedUp
+							//
+							//    make sure it is not below minimum interval
+							//                     |
+							//                    \/
 							spawnInterval = Math.max(spawnInterval - spawnIntervalSpeedUp, minSpawnInterval);
 							spawnVariation = Math.max(spawnVariation - spawnIntervalSpeedUp, 0);
 						}
-					}, 16.666666);
+					}, 16.666666); // Run at 60 FPS (1000 ms / 60 frames - interval of 16.6(6) ms)
 
+					// Finally, create the health icons
 					for (let i = 0; i < initialHealth; i++) {
+						// Create img HTML element
 						const heart = document.createElement("img");
 
+						// Assign icon source
 						heart.src = "https://cdn-icons-png.flaticon.com/512/1762/1762755.png";
 
+						// Insert into health container
 						healthDisplay.appendChild(heart);
 					}
 				}
 
-				game.classList.toggle("running");
+				// Regardless of game state:
+				// Toggle the visibility of the game area
+				game.classList.toggle("running"); // jf "running" is already in class list - remove it, otherwise - add it
 
-				updatePLayButtonText();
+				updatePlayButtonText();
 			}
 
-			function updatePLayButtonText() {
-				playButton.innerText = mainLoop === null ? "Shall we play a game? :)" : "I don't wanna play anymore :(";
+			function updatePlayButtonText() {
+				// Use ternary operator to change the text inside the Play Button
+				playButton.innerText = mainLoop ? "I don't wanna play anymore :(" : "Shall we play a game? :)";
 			};
 
+			// This function check if an element is located above (on z-axis) the other element
 			function elementsOverlapping(element1, element2) {
+				// getBoundingClientRect - returns coordinates of 4 sides of an HTML element (left, right, top, bottom)
 				const rect1 = element1.getBoundingClientRect();
 				const rect2 = element2.getBoundingClientRect();
 
@@ -163,41 +200,47 @@
 					rect1.top < rect2.bottom;
 			}
 
-			function formatTime(miliseconds) {
-				return [
-					Math.floor(miliseconds / 60 / 60 / 1000),
-					Math.floor(miliseconds / 60 / 1000) % 60,
-					Math.floor(miliseconds / 1000) % 60,
+			// Convert time in ms into: "HH:MM:SS.sss" (ISO 8601)
+			function formatTime(milliseconds) {
+				return [ // 1. Create an array, fill with hours, minutes and seconds extracted from the timestamp 
+					Math.floor(milliseconds / 60 / 60 / 1000),
+					Math.floor(milliseconds / 60 / 1000) % 60,
+					Math.floor(milliseconds / 1000) % 60,
 				]
-					.map((value) => String(value).padStart(2, "0"))
-					.filter((value, index) => value !== "00" || index > 0)
-					.join(":")
-					.concat(".")
-					.concat(String(miliseconds % 60).padStart(3, "0"))
+					.map((value) => String(value).padStart(2, "0")) // 2. Cast each value to string, add leading zeros
+					.filter((value, index) => value !== "00" || index > 0) // 3. Discard hours, if the value is "00"
+					.join(":") // 4. Combine hours, minutes and seconds to string: "HH:MM:SS"
+					.concat(".") // 5. Add a period: "HH:MM:SS."
+					.concat(String(milliseconds % 60).padStart(3, "0")) // 6. Add miliseconds, padded with leading zeros
 			}
 
 			class FoodItem {
 				constructor() {
+					// Init an array with possible image sources
 					const images = [
 						"https://cdn-icons-png.flaticon.com/512/3259/3259041.png",
 						"https://cdn-icons-png.flaticon.com/512/2515/2515345.png",
 						"https://cdn-icons-png.flaticon.com/512/2718/2718224.png",
 						"https://cdn-icons-png.flaticon.com/512/3361/3361870.png",
 						"https://cdn-icons-png.flaticon.com/512/2713/2713962.png"
-					].toSorted(() => 0.5 - Math.random());
+					].toSorted(() => 0.5 - Math.random()); // <- sort randomly xD
 
+					// Length of the side of the image
 					const width = 80;
 
+					// Create and init the image element
 					const image = document.createElement("img");
 					image.classList.add("game-food-item");
 					image.src = images[0];
 					image.style.width = `${width}px`;
-					image.style.top = `${Math.random() * (foodItemsContainer.clientHeight / 2)}px`;
+					image.style.top = `${Math.random() * (foodItemsContainer.clientHeight / 2)}px`; // set random vertical position
 
+					// Assign variables to this object
 					this.image = image;
 
 					this.size = width;
 
+					// Set random initial velocity
 					this.velocity = {
 						x: 5 + Math.random() * 10,
 						y: -10 - (Math.random() * 20)
@@ -210,86 +253,115 @@
 					this.isOnConveyor = false;
 				}
 
+				// Spawns the FoodItem into the game area
 				spawn() {
-					foodItemsContainer.appendChild(this.image);
-					foodItems.push(this);
+					foodItemsContainer.appendChild(this.image); // Insert into food items container
+					foodItems.push(this); // Add to food items array
 
-					new Audio('sounds/woosh_s21KzKN.mp3').play();
+					new Audio('sounds/woosh_s21KzKN.mp3').play(); // Play sound effect :3
 				}
 
+				// Uses "pHySiCs" to move the item
 				move() {
+					// If on conveyor:
 					if (this.isOnConveyor) {
+						// Will be using style.bottom from now on
 						this.image.style.top = null;
 
+						// Move slightly to the right
 						this.image.style.left = `${this.image.offsetLeft + conveyorSpeed}px`;
+						// Ensure the item is on the conveyor
 						this.image.style.bottom = `${conveyor.offsetHeight}px`;
 					}
+					// Otherwise:
 					else {
+						// Check if we are touching the Right Wall:
 						if (elementsOverlapping(rightWall, this.image)) {
-							this.velocity.x = -20;
-							this.velocity.y = -50;
+							// If so, set the velocity to make a nice bounce
+							this.velocity = {
+								x: -20,
+								y: -50
+							};
 						}
 
+						// Update the position of the FoodItem
 						this.image.style.left = `${this.image.offsetLeft + this.velocity.x}px`;
 						this.image.style.top = `${this.image.offsetTop + this.velocity.y}px`;
 
-						this.velocity.x /= horizontalDamping;
+						// Apply damping (or drag) to horizontal movement
+						this.velocity.x *= horizontalDamping;
+						// Add gravity and make sure the speed is below the terminal velocity
 						this.velocity.y = Math.min(this.velocity.y + gravity, terminalVelocity);
 					}
 
+					// After the movement is done, check if item needs to be despawned
 					this.tryDespawn();
 				}
 
+				// Manually updates the FoodItem position
 				setPosition(x, y) {
+					// First, move the item to specified coords
 					this.image.style.left = `${x - this.size / 2}px`;
 					this.image.style.top = `${y - this.size / 2}px`;
 
+					// Record the new position
 					const newGrabPosition = {
 						x: this.image.offsetLeft,
 						y: this.image.offsetTop
 					};
-
+					// Subtract from previous position
 					this.velocity = {
 						x: newGrabPosition.x - this.previousGrabPosition.x,
 						y: newGrabPosition.y - this.previousGrabPosition.y
 					};
-
+					// Update the current position
 					this.previousGrabPosition = newGrabPosition;
 
+					// Try despawning
 					this.tryDespawn();
 				}
 
 				tryDespawn() {
+					// If the item is inside the game area - do nothing
 					if (this.image.offsetTop < game.clientHeight &&
 						this.image.offsetLeft < game.clientWidth) {
 						return;
 					}
-
+					// Otherwise - despawn
 					this.despawn();
 
+					// Now, let's see if we lost any health:
+					// If the item is on the conveyor - play the "good" sound effect and end at that
+					// This basically means, that item was moved outside of the game area by the conveyor
 					if (this.isOnConveyor) {
 						new Audio('sounds/anime-wow-sound-effect.mp3').play();
 
 						return;
 					}
-
+					// Otherwise, do the bad things (item has fallen out of the game area):
+					// Remove 1 health icon
 					healthDisplay.firstElementChild.remove();
 
+					// Play the "bad" sound effect
 					new Audio('sounds/classic_hurt.mp3').play();
 
+					// Check if we still have some health
 					if (--health > 0) {
+						// If we do, and only 1 heart is left ...
 						if (health === 1) {
+							// ... show the low health warning overlay
 							lowHpOverlay.classList.add("visible");
 						}
-
+						// End it at that
 						return;
 					}
-
+					// Otherwise (meaning we lost all of our health), end the game
 					startGame();
-
+					// And show the game over dialog
 					alert(`You ded xD\nYou lasted: ${formatTime(Date.now() - gameStartTimestamp)}`);
 				}
 
+				// Removes the FoodItem from the container and the array
 				despawn() {
 					foodItemsContainer.removeChild(this.image);
 					foodItems = foodItems.filter(foodItem => foodItem !== this);
@@ -311,52 +383,68 @@
 				}
 			}
 
+			// Now let's add some event handlers:
+			// This one is called whenever we move the mouse inside the game area
 			game.addEventListener("mousemove", event => {
+				// Calculate the cursor coords inside the game area
 				const cursorPosition = {
 					x: event.clientX - game.offsetLeft,
 					y: event.clientY - game.offsetTop
 				};
-
-				for (const chopstick of chopsticks) {
+				// Then, update the chopsticks position
+				for (const chopstick of chopsticksContainer.children) {
 					chopstick.style.left = `${Math.max(cursorPosition.x, 0)}px`;
 					chopstick.style.top = `${Math.max(cursorPosition.y, 60)}px`;
 				}
-
+				// If a FoodItem is being held by the chopsticks - update it's position
+				// We use optional chaining for that - essentially this is checking if the
+				// caughtFoodItem is null/undefined before calling the function
+				// Equivalent to:
+				// if(caughtFoodItem !== null) {
+				//     caughtFoodItem.blahBlahBlah();
+				// }
 				caughtFoodItem?.setPosition(cursorPosition.x, cursorPosition.y);
 			});
 
+			// Next 2 event listeners are used to show/hide the mouse cursor when exiting/entering the game area
 			game.addEventListener("mouseenter", event => {
 				game.style.cursor = "none";
 			});
-
 			game.addEventListener("mouseleave", event => {
 				game.style.cursor = null;
 			});
 
+			// When a mouse button is pressed:
 			game.addEventListener("mousedown", event => {
+				// Again, calculate the cursor coords inside the game area
 				const cursorPosition = {
 					x: event.clientX - game.offsetLeft,
 					y: event.clientY - game.offsetTop
 				};
 
-				chopsticks.item(0).classList.add("grab");
+				// Play the grab animation on the chopsticks
+				chopsticksContainer.firstElementChild.classList.add("grab");
 
+				// Iterate over all of the FoodItems
 				for (const foodItem of foodItems) {
 					if (!elementsOverlapping(chopsticksHitbox, foodItem.image)) {
 						continue;
 					}
-
+					// If a FoodItem is overlapping the chopsticks hitbox - catch it
 					foodItem.catch(cursorPosition.x, cursorPosition.y);
 				}
 			});
 
+			// When releasing the mouse button:
 			game.addEventListener("mouseup", event => {
-				chopsticks.item(0).classList.remove("grab");
-
+				// Stop the grab animation
+				chopsticksContainer.firstElementChild.classList.remove("grab");
+				// And release a caught FoodItem, if there is one
 				caughtFoodItem?.release(event.movementX, event.movementY);
 			});
 
-			updatePLayButtonText();
+			// Finally, display the initial text on the Play Button
+			updatePlayButtonText();
 		</script>
 	</body>
 </html>
